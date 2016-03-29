@@ -2,6 +2,15 @@ if !exists('g:clojure_foldwords')
     let g:clojure_foldwords = "def,ns"
 endif
 
+if !exists('g:clojure_dont_fold_blank_lines')
+    let g:clojure_dont_fold_blank_lines = 0
+endif
+
+if !exists('g:clojure_auto_open_folds')
+    let g:clojure_auto_open_folds = 0
+endif
+
+
 function! CompareLispword(line)
     let fwc = split(g:clojure_foldwords,",")
 
@@ -22,7 +31,7 @@ function! GetClojureFold()
         let my_cljmax = line("$")
 
         while (1)
-            let my_cljnum = my_cljnum + 1
+            let my_cljnum = my_cljnum
             if my_cljnum > my_cljmax
                 return "<1"
             endif
@@ -30,7 +39,11 @@ function! GetClojureFold()
             let my_cljdata = getline(my_cljnum)
 
             if my_cljdata =~ '^$'
-                return "<1"
+                if g:clojure_dont_fold_blank_lines
+                    return "-1"
+                else 
+                    return "<1"
+                endif
             else
                 return "="
             endif
@@ -49,5 +62,10 @@ augroup ft_clojure
     au!
     au BufNewFile,BufRead *.clj set filetype=clojure
     au FileType clojure silent! call StartClojureFolding()
+
+    if g:clojure_auto_open_folds
+        au FileType clojure setlocal foldlevel=99
+    endif
+    
     au FileType clojure setlocal report=100000
 augroup END

@@ -35,6 +35,20 @@ and
     (run* [q]
        (== {:a q :b 2} {:a 1 :b 2}))
 <
+
+Additional options:
+
+If you want to exclude blank lines from fold, use
+>
+    let g:clojure_dont_fold_blank_lines = 1 (default 0)
+<
+
+If you want to automatically open all folds after opening the file, use
+>
+    let g:clojure_auto_open_folds = 1 (default 0)
+<
+
+And whether or not to
 ==============================================================================
 LICENSE                                                      *cljfold-license*
 
